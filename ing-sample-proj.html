@@ -1,0 +1,244 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<dom-module id="ing-login">  
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+       ::selection {
+        background-color: #b5e2e7;
+      }
+
+       ::-moz-selection {
+        background-color: #8ac7d8;
+      }
+
+      .container {
+            display: -webkit-flex;
+            display: flex;
+            height: 100%;
+            }
+
+      h2 {
+            text-align: center;
+            font-size: 175%;
+            color: #757575;
+            font-weight: 300;
+            }
+      #Reg { 
+            margin: 10% auto;
+            min-width: 750px;           
+            background-color: #fff;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            -ms-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+            -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+            min-width: 450px;
+            }
+     
+      paper-input{
+        margin:0 30px;
+        padding:0px;
+      }
+      paper-input:focus{
+        outline: none;
+        border-bottom-color: #ff6200 !important;
+      }
+      paper-button {
+        font-family: 'Roboto', 'Noto', sans-serif;
+        font-weight: normal;
+        font-size: 20px;
+        -webkit-font-smoothing: antialiased;
+        width: 85%;
+        height: 50px;
+        display: block;
+        margin: 30px auto 30px;
+        color: white;
+        background-color: #ff6200;
+        border: none;
+        text-align: center;
+      }
+    </style>
+    <section class="container">
+      <article id="Reg">
+        <form name="form">
+          <h2>LOGIN</h2>
+          <paper-input id="useremail" value="{{loginDetails.useremail::input}}" name="useremail" type="email" placeholder="USERNAME@DOMAIN.COM"
+            autofocus="autofocus" error-message="Username required" auto-validate required></paper-input>
+          <div class="invalid">
+            <span hidden="{{hideemail}}">{{messageemail}}</span>
+            
+          </div>
+          <paper-input id="password" value="{{loginDetails.password::input}}" minlength="8" maxlength="12" name="password" type="password" placeholder="PASSWORD" error-message="Password required" auto-validate required></paper-input>
+          
+          <div class="invalid">
+            <span hidden="{{hidepwd}}">{{messagepwd}}</span>
+          </div>
+          <paper-button class="RegButton" id="submitbtn" type="button" label="LOGIN" on-click="submituser">Login</paper-button>
+        </form>
+      </article>
+    </section>
+
+  </template>
+
+
+
+  <script>
+    class ingLogin extends Polymer.Element {
+      static get is() { return 'ing-login'; }
+      static get properties() {
+        return {
+          pagetitle: {
+            type: String,
+            value: 'Login Form'
+          },
+          useremail: {
+            type: String,
+            value: '',
+            observer: 'emailidentification'
+          },
+          password: {
+            type: String
+          },
+          loginstatus: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          message: {
+            type: String,
+            Value: ''
+          },
+
+          messageemail: {
+            type: String,
+            Value: ''
+          },
+           messagepwd: {
+            type: String,
+            Value: ''
+          },
+          hide: {
+            type: Boolean,
+            value: true
+          },
+          hideemail: {
+            type: Boolean,
+            value: true
+          },
+          hidepwd: {
+            type: Boolean,
+            value: true
+          },
+          
+          getParams:  {
+            type:Object,
+            value : {useremail : "harshita@gmail.com", password:"1234"}
+          },
+          sessioninfo:{
+            type: Object,
+            value : {useremail : "c@ing.com", password:"ing@9866"},
+            notify: true,
+            reflectToAttribute: true
+          },
+          loginDetails:{
+            type:Object,
+            value : {useremail : "customer1@ing.com", password:"ing@9866"},
+            notify: true,
+            reflectToAttribute: true
+          }
+          
+        };
+      }
+     
+      emailidentification(newval, oldval) {
+        let validemail = /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+        // /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (validemail.test(newval)) {
+          this.messageemail = "valid";
+          this.hideemail = true;
+        } else {
+          this.messageemail = "invalid email";
+          if (newval != "") {
+            this.hideemail = false;
+          }
+        }
+
+      }
+      // _getParams()
+      // {
+      //   return ('{"useremail" : "customer1@ing.com", "password":"ing@9866"}');
+      // }
+      submituser() {
+        let uemail = this.$.useremail.value;
+        let upass = this.$.password.value;
+        let subtn = this.$.submitbtn;
+        if (uemail == "" || upass == "") {
+          // alert("in if");
+          this.message = "Please Enter Valid Credentials!";
+          this.hide = false;
+        }
+        else {
+          console.log("useremail"+uemail+", password"+upass );
+          let values = {"useremail" : uemail, "password":upass };
+          this.getParams = values;
+          //this.$.getloginstatus.params();
+          this.$.getloginstatus.generateRequest();
+        }
+        let pwdptrn= /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,12})/;
+        if(pwdptrn.test(upass)){
+          this.messagepwd = "valid";
+          this.hidepwd = true;
+        }else{
+          this.messagepwd = "Please use special characters, upper and lowercase, digits with min 8 to 12 characters";
+          this.hidepwd = false;
+        }
+        let mailptrn = /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+        if(mailptrn.test(uemail)){
+          this.messageemail = "valid";
+          this.hideemail = true;
+        }else{
+          this.messageemail = "Please Enter valid email";
+          this.hideemail = false;
+        }
+        
+       
+        // alert(JSON.stringify(this.loginDetails));
+        //this.$.getloginstatus.generateRequest();
+        
+        
+      }
+
+      handleResponse(res) {
+        if(res.detail.response.status == 'failed') {
+          this.message = "Username and Password doesn't match, Please try again";
+          this.hide = false;
+        } else if(res.detail.response.status == 'success'){
+          this.sessioninfo = res.detail.response;
+        } else {
+          this.message = "Something went wrong. Please try again later.";
+          this.hide = false;
+        }
+        
+      }
+    }
+
+    window.customElements.define(ingLogin.is, ingLogin);
+  </script>
+
+</dom-module>

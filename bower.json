@@ -1,0 +1,23 @@
+{
+  "name": "ing-sample-proj",
+  "description": "ing-sample-proj",
+  "main": "https://github.com/ckkishorekumar85/ing-sample-proj",
+  "keywords": [
+    "bower-sample-package"
+  ],
+  "authors": [
+    "kishore"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ckkishorekumar85/ing-sample-proj",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "^2.0.2"
+  }
+}
